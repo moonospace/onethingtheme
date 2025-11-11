@@ -1,3 +1,4 @@
+import contentCollections from "@content-collections/vite";
 import tailwindcss from "@tailwindcss/vite";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import react from "@vitejs/plugin-react";
@@ -11,11 +12,13 @@ export default defineConfig({
   },
   plugins: [
     tsconfigPaths(),
+    contentCollections(),
     tailwindcss(),
     tanstackStart({
       prerender: {
         enabled: true,
         crawlLinks: true,
+        autoStaticPathsDiscovery: true,
       },
       srcDirectory: "src/app",
       sitemap: {

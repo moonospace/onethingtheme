@@ -1,51 +1,35 @@
-import * as fs from "node:fs/promises";
-import path from "node:path";
-import { parseMarkdown } from "@shared/libs";
-
-type DocFrontMatter = {
-  title: string;
-  description: string;
-  publishedAt: string;
-};
-
-export type DocDetail = {
-  data: DocFrontMatter;
-  content: any;
-};
+import { createServerFn } from "@tanstack/react-start";
+import { allDocs, type Doc } from "content-collections";
+import z from "zod";
 
 export type BreadScrumb = {
   title: string;
   link: string;
 };
 
-const DOCS_PATH = "/src/contents/docs";
-
 function parseSlug(slug: string): string {
   return slug === "" ? "introduction" : slug;
 }
 
-async function loadRawFile(slug: string) {
-  const filePath = path.join(process.cwd(), DOCS_PATH, `${slug}.md`);
-  const rawFile = await fs.readFile(filePath, "utf8");
+export const getBreadcrumb = createServerFn()
+  .inputValidator(z.object({ slug: z.string() }))
+  .handler((ctx): BreadScrumb[] => {
+    const slug = parseSlug(ctx.data.slug);
+    const docs = allDocs;
+    const filteredDocs = docs.filter((d) => d._meta.path === slug);
+    const bds =
+      filteredDocs.map((d) => ({
+        title: d.title,
+        link: d._meta.path,
+      })) || [];
+    return bds;
+  });
 
-  return rawFile;
-}
-export async function getBreadcrumb(slug: string): Promise<BreadScrumb[]> {
-  const parsedSlug = parseSlug(slug);
-  const rawFile = await loadRawFile(parsedSlug);
-  const { data } = parseMarkdown(rawFile);
-
-  return [
-    {
-      title: data.title,
-      link: `/docs/${parsedSlug}`,
-    },
-  ];
-}
-
-export async function getDocDetail(slug: string): Promise<DocDetail> {
-  const parsedSlug = parseSlug(slug);
-  const rawFile = await loadRawFile(parsedSlug);
-  const { data, content } = parseMarkdown(rawFile);
-  return { data, content } as DocDetail;
-}
+export const getDocDetail = createServerFn()
+  .inputValidator(z.object({ slug: z.string() }))
+  .handler((ctx): Doc => {
+    const slug = parseSlug(ctx.data.slug);
+    const docs = allDocs;
+    const doc = docs.filter((d) => d._meta.path === slug)[0];
+    return doc;
+  });

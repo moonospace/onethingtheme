@@ -20,7 +20,7 @@ export function Breadcrumb({ breadscrumbs }: Props) {
 
           <a
             className="transition-all duration-300 hover:text-foreground"
-            href={link}
+            href={`/docs/${link}`}
           >
             {title}
           </a>

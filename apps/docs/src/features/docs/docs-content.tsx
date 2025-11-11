@@ -1,21 +1,19 @@
+import { MDXContent } from "@content-collections/mdx/react";
 import { ArticleContent } from "@shared/components";
-import { DocsMarkdownContent } from "./docs-markdown-content";
-import type { DocDetail } from "./docs-service";
+import type { Doc } from "content-collections";
 
 type Props = {
-  doc: DocDetail;
+  doc: Doc;
 };
 
 export function DocsContent({ doc }: Props) {
-  const { content, data } = doc;
-
   return (
     <article className="flex flex-col">
       <ArticleContent>
-        <h1>{data.title}</h1>
-        <p className="-mt-2! text-foreground/60">{data.description}</p>
+        <h1>{doc.title}</h1>
+        <p className="-mt-2! text-foreground/60">{doc.description}</p>
 
-        <DocsMarkdownContent content={content} />
+        <MDXContent code={doc.mdx} />
       </ArticleContent>
     </article>
   );

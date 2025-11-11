@@ -8,11 +8,6 @@ import {
 import { generatedMetadata } from "@shared/libs";
 import { createFileRoute } from "@tanstack/react-router";
 
-// generatedMetadata({
-//     title: `Docs - ${doc.detail.data.title} | One thing theme`,
-//     description: `${doc.detail.data.description}`,
-//   })
-
 export const Route = createFileRoute("/docs/$")({
   head: () => ({
     meta: generatedMetadata({
@@ -23,9 +18,8 @@ export const Route = createFileRoute("/docs/$")({
   }),
   loader: async (ctx) => {
     const slug = ctx.params._splat || "";
-
-    const bc = await getBreadcrumb(slug);
-    const detail = await getDocDetail(slug);
+    const bc = await getBreadcrumb({ data: { slug } });
+    const detail = await getDocDetail({ data: { slug } });
 
     return {
       doc: {
