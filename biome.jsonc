@@ -2,6 +2,21 @@
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
   "extends": ["ultracite/core", "ultracite/react"],
   "linter": {
-    "rules": {},
-  },
+    "rules": {
+      "performance": {
+        "noBarrelFile": "off",
+        "noNamespaceImport": "off"
+      },
+      "suspicious": {
+        "noArrayIndexKey": "off",
+        "noExplicitAny": "off"
+      },
+      "correctness": {
+        "useImageSize": "off"
+      },
+      "style": {
+        "useFilenamingConvention": "off"
+      }
+    }
+  }
 }
