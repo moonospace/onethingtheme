@@ -8,9 +8,6 @@
 
 /* Tailwindcss */
 @import "tailwindcss";
-
-@plugin "@tailwindcss/forms";
-@plugin "tailwindcss-animate";
 @plugin "@tailwindcss/typography";
 
 :root {
